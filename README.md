@@ -26,3 +26,6 @@ Provide an efficient solution for history disaster study and research.
 Meeting 1 is on Friday, May-18-2018.
 
 Expected Milestone: db built; decide which structure is used.
+
+## Data
+Data is from FEMA dataset. Downloaded on May 11th 2018.
