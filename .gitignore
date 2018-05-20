@@ -59,3 +59,19 @@ typings/
 
 # next.js build output
 .next
+
+# Itellij
+DizasterXAPI/.idea/
+*.iml
+*.iws
+
+# Maven
+DizasterXAPI/log/
+DizasterXAPI/target/
+DizasterXAPI/out/
+
+# Mac
+.DS_Store
+
+
+
