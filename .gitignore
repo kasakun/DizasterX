@@ -68,7 +68,6 @@ API/.idea/
 # Maven
 API/log/
 API/target/
-API/out/
 
 # Mac
 .DS_Store
