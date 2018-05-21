@@ -61,14 +61,14 @@ typings/
 .next
 
 # Itellij
-DizasterXAPI/.idea/
+API/.idea/
 *.iml
 *.iws
 
 # Maven
-DizasterXAPI/log/
-DizasterXAPI/target/
-DizasterXAPI/out/
+API/log/
+API/target/
+API/out/
 
 # Mac
 .DS_Store
