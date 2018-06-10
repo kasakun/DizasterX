@@ -11,3 +11,7 @@ mvn clean compile
 ```
 mvn exec:java
 ```
+
+## Query
+
+http://localhost:8080/api/data?title=aa

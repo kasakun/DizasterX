@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.PathParam;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -25,9 +26,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Root resource (exposed at "myresource" path)
+ * Root resource (exposed at "data" path)
+ * 
+ * The api provides query:
+ * @ Number : disasterNumber
+ * 
+ * @ Date   : declaration
+ *            fyDeclared
+ *            begin
+ *            end 
+ *            closeout
+ *            lastupdate
+ * @ Type   : incident
+ *            disaster
+ * 
+ * @ Title  
+ * @ Hash
+ * 
  */
-@Path("hello")
+@Path("data")
 public class MyResource {
 
     /**
@@ -37,8 +54,9 @@ public class MyResource {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getIt() {
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getTitle(@PathParam("title") String title) {
+        System.out.println(title);
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
