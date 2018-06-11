@@ -4,7 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -48,19 +48,37 @@ import java.util.List;
 public class MyResource {
 
     /**
-     * Method handling HTTP GET requests. The returned object will be sent
-     * to the client as "text/plain" media type.
-     *
-     * @return String that will be returned as a text/plain response.
+     * Method handling disaster title
+     * 
+     * @param Title
+     * @return A list of entries match the title name.
      */
     @GET
+    @Path("/title")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getTitle(@PathParam("title") String title) {
-        System.out.println(title);
+    public String getByTitle(@QueryParam("value") String title) {
+        System.out.println("value :"  + title);
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
         Document doc = collection.find(eq("title", "TORNADO")).first();
+        return doc.toJson();
+    }
+
+    /**
+     * Method handling disaster title
+     * 
+     * @param Hash
+     * @return One entry match the hash value
+     */
+    @GET
+    @Path("/hash")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByHash(@QueryParam("value") String value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        Document doc = collection.find(eq("hash", value)).first();
         return doc.toJson();
     }
 }
