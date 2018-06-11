@@ -61,8 +61,25 @@ public class MyResource {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
-        Document doc = collection.find(eq("title", "TORNADO")).first();
-        return doc.toJson();
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+                System.out.println(document.toJson());
+            }
+        };
+        
+        collection.find(eq("title", title)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Title Query")
+                        .append("status", "ok")
+                        .append("entries", entries);
+
+        return res.toJson();
     }
 
     /**
@@ -78,7 +95,14 @@ public class MyResource {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
-        Document doc = collection.find(eq("hash", value)).first();
-        return doc.toJson();
+
+        Document entries = collection.find(eq("hash", value)).first();
+
+        // Packaging
+        Document res = new Document("name", "Hash Query")
+                        .append("status", "ok")
+                        .append("entries", entries);
+
+        return res.toJson();
     }
 }
