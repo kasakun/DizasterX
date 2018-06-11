@@ -13,5 +13,10 @@ mvn exec:java
 ```
 
 ## Query
+List bunch of sample link.
 
-http://localhost:8080/api/data?title=aa
+### Disaster Title
+http://localhost:8080/DizasterX/data/title?value=TORNADO
+
+### Hash
+http://localhost:8080/DizasterX/data/hash?value=e6f77c3a97c63d478bf14c9a58f60a0d
