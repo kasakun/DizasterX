@@ -24,6 +24,7 @@ import static com.mongodb.client.model.Updates.*;
 import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Root resource (exposed at "data" path)
@@ -55,27 +56,30 @@ public class MyResource {
     @GET
     @Path("/declarationDate")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getByDeclarationDate(@QueryParam("value") String value) {
+    public String getByDeclarationDate(@QueryParam("year") String year) {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
         
+
         final List<Document> entries = new ArrayList<>();
 
         Block<Document> addToList = new Block<Document>() {
             @Override
             public void apply(final Document document) {
+                System.out.println("====" + document.toJson());
                 entries.add(document);
             }
         };
         
-        collection.find(eq("declarationDate", value)).forEach(addToList);
+        collection.find(regex("declarationDate", year)).forEach(addToList);
         
         // Packaging
         Document res = new Document("name", "Declartion Date Query")
                         .append("status", "ok")
                         .append("entries", entries);
 
+        mongoClient.close();
         return res.toJson();
     }
 
@@ -83,7 +87,9 @@ public class MyResource {
     /**
      * Method handling disaster title
      * 
-     * @param Title i.e. "TORNADO"
+     * @param Title support fuzzy matching and case insensitive. 
+     *        i.e. "tornado"/"tor" will return all contain
+     *        "TORNADO"
      * @return A list of entries match the title name.
      */
     @GET
@@ -102,14 +108,17 @@ public class MyResource {
                 entries.add(document);
             }
         };
-        
-        collection.find(eq("title", value)).forEach(addToList);
+
+        Pattern pattern = Pattern.compile(value, Pattern.CASE_INSENSITIVE);
+        collection.find(regex("title", pattern)).forEach(addToList);
         
         // Packaging
         Document res = new Document("name", "Title Query")
                         .append("status", "ok")
+                        .append("size", entries.size())
                         .append("entries", entries);
 
+        mongoClient.close();
         return res.toJson();
     }
 
@@ -133,7 +142,8 @@ public class MyResource {
         Document res = new Document("name", "Hash Query")
                         .append("status", "ok")
                         .append("entries", entries);
-
+        
+        mongoClient.close();
         return res.toJson();
     }
 }
