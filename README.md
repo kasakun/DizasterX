@@ -14,18 +14,13 @@ server: ngnix
 Provide an efficient solution for history disaster study and research.
 
 ## RoadMap
-| Tables                   | Description                          | Priority | Contributor |
-| ------------------------ |:------------------------------------:| --------:| -----------:|
-| db build                 | mongodb setup                        | High     | Zeyu Chen   |
-| front end(react + redux) | design app structure                 | High     | Xibei Zhang |
-| data virtulization       | d3 or opengl for js is recommended   | Low      | Xibei Zhang |
-| RESTful api              | express + mongoose, learn and deploy.| Low      | Zeyu Chen   |
+| Tables                   | Description                          | Priority | Contributor |   Status   |
+| ------------------------ |:------------------------------------:| --------:| -----------:|-----------:|
+| db build                 | mongodb setup                        | High     | Zeyu Chen   | In Process |
+| front end(react + redux) | design app structure                 | High     | Xibei Zhang |  To Do     |
+| data virtulization       | d3 or opengl for js is recommended   | Low      | Xibei Zhang |  To Do     |
+| RESTful api              | express + mongoose, learn and deploy | Low      | Zeyu Chen   |  To Do     |
 
-
-## Date
-Meeting 1 is on Friday, May-18-2018.
-
-Expected Milestone: db built; decide which structure is used.
 
 ## Data
 Data is from FEMA dataset. Downloaded on May 11th 2018.
