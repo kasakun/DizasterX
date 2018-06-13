@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  *            begin          String
  *            end            String
  *            closeout       String
- *            lastupdate     String
+ *            lastrefresh    String
  * @ Place:   state          String
  *            county         String
  *            palceCode      int
@@ -218,6 +218,106 @@ public class MyResource {
         collection.find(and(regex("incidentEndDate", yearPattern), 
                             regex("incidentEndDate", monthPattern),
                             regex("incidentEndDate", dayPattern))).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Incident End Date Query")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling close out date
+     * 
+     * if params are null return all results
+     * @param year Can be fuzzy
+     * @param month Can be fuzzy
+     * @param day Can be fuzzy
+     * @return A list of entries match the declaration date
+     */
+    @GET
+    @Path("/disasterCloseOutDate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByDisasterCloseOutDate(@QueryParam("year") String year, 
+                                            @QueryParam("month") String month,
+                                            @QueryParam("day") String day) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // Regex 
+        year = year == null ? ".*":year;
+        month = month == null ? ".*":("-" + month + "-");
+        day = day == null ? ".*":("-" + day + "T");
+
+        Pattern yearPattern = Pattern.compile(year);
+        Pattern monthPattern = Pattern.compile(month);
+        Pattern dayPattern = Pattern.compile(day);
+
+        collection.find(and(regex("disasterCloseOutDate", yearPattern), 
+                            regex("disasterCloseOutDate", monthPattern),
+                            regex("disasterCloseOutDate", dayPattern))).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Incident End Date Query")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling last refresh date
+     * 
+     * if params are null return all results
+     * @param year Can be fuzzy
+     * @param month Can be fuzzy
+     * @param day Can be fuzzy
+     * @return A list of entries match the declaration date
+     */
+    @GET
+    @Path("/lastRefresh")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByLastRefresh(@QueryParam("year") String year, 
+                                            @QueryParam("month") String month,
+                                            @QueryParam("day") String day) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // Regex 
+        year = year == null ? ".*":year;
+        month = month == null ? ".*":("-" + month + "-");
+        day = day == null ? ".*":("-" + day + "T");
+
+        Pattern yearPattern = Pattern.compile(year);
+        Pattern monthPattern = Pattern.compile(month);
+        Pattern dayPattern = Pattern.compile(day);
+
+        collection.find(and(regex("lastRefresh", yearPattern), 
+                            regex("lastRefresh", monthPattern),
+                            regex("lastRefresh", dayPattern))).forEach(addToList);
         
         // Packaging
         Document res = new Document("name", "Incident End Date Query")
