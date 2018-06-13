@@ -30,59 +30,211 @@ import java.util.regex.Pattern;
  * Root resource (exposed at "data" path)
  * 
  * The api provides query:
- * @ Number : disasterNumber
+ * @ Number : disasterNumber int
  * 
- * @ Date   : declaration
- *            fyDeclared
- *            begin
- *            end 
- *            closeout
- *            lastupdate
- * @ Type   : incident
- *            disaster
+ * @ Date   : declaration    String
+ *            fyDeclared     int
+ *            begin          String
+ *            end            String
+ *            closeout       String
+ *            lastupdate     String
+ * @ Place:   state          String
+ *            county         String
+ *            palceCode      int
  * 
- * @ Title  
- * @ Hash
+ * @ Type   : incident       String
+ *            disaster       String
+ * 
+ * @ Title                   String
+ * @ Hash                    String
  * 
  */
 @Path("data")
 public class MyResource {
     /**
-     * Method handling disaster title
+     * Method handling declaration date
      * 
-     * @param Declaration Date i.e."1979-04-11T00:00:00.000Z"
+     * if params are null return all results
+     * @param year Can be fuzzy
+     * @param month Can be fuzzy
+     * @param day Can be fuzzy
      * @return A list of entries match the declaration date
      */
     @GET
     @Path("/declarationDate")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getByDeclarationDate(@QueryParam("year") String year) {
+    public String getByDeclarationDate(@QueryParam("year") String year, 
+                                       @QueryParam("month") String month,
+                                       @QueryParam("day") String day) {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
-        
 
         final List<Document> entries = new ArrayList<>();
 
         Block<Document> addToList = new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                System.out.println("====" + document.toJson());
                 entries.add(document);
             }
         };
-        
-        collection.find(regex("declarationDate", year)).forEach(addToList);
+
+        // Regex 
+        year = year == null ? ".*":year;
+        month = month == null ? ".*":("-" + month + "-");
+        day = day == null ? ".*":("-" + day + "T");
+
+        Pattern yearPattern = Pattern.compile(year);
+        Pattern monthPattern = Pattern.compile(month);
+        Pattern dayPattern = Pattern.compile(day);
+
+        collection.find(and(regex("declarationDate", yearPattern), 
+                            regex("declarationDate", monthPattern),
+                            regex("declarationDate", dayPattern))).forEach(addToList);
         
         // Packaging
         Document res = new Document("name", "Declartion Date Query")
-                        .append("status", "ok")
-                        .append("entries", entries);
+                                   .append("status", "ok")
+                                   .append("entries", entries);
 
         mongoClient.close();
         return res.toJson();
     }
 
+    /**
+     * Method handling fiscal year declared
+     * 
+     * @param year Must be accurate number for now
+     * @return A list of entries match the fiscal year
+     */
+    @GET
+    @Path("/fyDeclared")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByFyDeclared(@QueryParam("year") int year) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // Find exact year
+        collection.find(eq("fyDeclared", year)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Fiscal Year Declared Query")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling begin date
+     * 
+     * if params are null return all results
+     * @param year Can be fuzzy
+     * @param month Can be fuzzy
+     * @param day Can be fuzzy
+     * @return A list of entries match the declaration date
+     */
+    @GET
+    @Path("/incidentBeginDate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByIncidentBeginDate(@QueryParam("year") String year, 
+                                         @QueryParam("month") String month,
+                                         @QueryParam("day") String day) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // Regex 
+        year = year == null ? ".*":year;
+        month = month == null ? ".*":("-" + month + "-");
+        day = day == null ? ".*":("-" + day + "T");
+
+        Pattern yearPattern = Pattern.compile(year);
+        Pattern monthPattern = Pattern.compile(month);
+        Pattern dayPattern = Pattern.compile(day);
+
+        collection.find(and(regex("incidentBeginDate", yearPattern), 
+                            regex("incidentBeginDate", monthPattern),
+                            regex("incidentBeginDate", dayPattern))).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Incident Begin Date Query")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling end date
+     * 
+     * if params are null return all results
+     * @param year Can be fuzzy
+     * @param month Can be fuzzy
+     * @param day Can be fuzzy
+     * @return A list of entries match the declaration date
+     */
+    @GET
+    @Path("/incidentEndDate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByIncidentEndDate(@QueryParam("year") String year, 
+                                       @QueryParam("month") String month,
+                                       @QueryParam("day") String day) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // Regex 
+        year = year == null ? ".*":year;
+        month = month == null ? ".*":("-" + month + "-");
+        day = day == null ? ".*":("-" + day + "T");
+
+        Pattern yearPattern = Pattern.compile(year);
+        Pattern monthPattern = Pattern.compile(month);
+        Pattern dayPattern = Pattern.compile(day);
+
+        collection.find(and(regex("incidentEndDate", yearPattern), 
+                            regex("incidentEndDate", monthPattern),
+                            regex("incidentEndDate", dayPattern))).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Incident End Date Query")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
 
     /**
      * Method handling disaster title
