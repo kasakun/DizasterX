@@ -23,3 +23,7 @@ Provide an efficient solution for history disaster study and research.
 
 ## Data
 Data is from FEMA dataset. Downloaded on May 11th 2018.
+
+## Ref
+Wow, found previous work
+https://github.com/jdungan/disasters
