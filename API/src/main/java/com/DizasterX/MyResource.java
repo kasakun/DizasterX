@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 /**
  * Root resource (exposed at "data" path)
  * 
- * The api provides query:
+ * The api provides:
  * @ Number : disasterNumber int
  * 
  * @ Date   : declaration    String
@@ -31,11 +31,16 @@ import java.util.regex.Pattern;
  *            closeout       String
  *            lastrefresh    String
  * @ Place:   state          String
- *            county         String
- *            palceCode      int
+ *            county         String   not all
+ *            palceCode      int      not all
  * 
  * @ Type   : incident       String
  *            disaster       String
+ * 
+ * @ Program: IH             int
+ *            IA             int
+ *            PA             int
+ *            HM             int
  * 
  * @ Title                   String
  * @ Hash                    String
@@ -85,7 +90,7 @@ public class MyResource {
                             regex("declarationDate", dayPattern))).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Declartion Date Query")
+        Document res = new Document("name", "Declartion Date")
                                    .append("status", "ok")
                                    .append("entries", entries);
 
@@ -102,7 +107,7 @@ public class MyResource {
     @GET
     @Path("/fyDeclared")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getByFyDeclared(@QueryParam("year") int year) {
+    public String getByFyDeclared(@QueryParam("value") int value) {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
@@ -117,10 +122,10 @@ public class MyResource {
         };
 
         // Find exact year
-        collection.find(eq("fyDeclared", year)).forEach(addToList);
+        collection.find(eq("fyDeclared", value)).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Fiscal Year Declared Query")
+        Document res = new Document("name", "Fiscal Year Declared")
                                    .append("status", "ok")
                                    .append("entries", entries);
 
@@ -135,7 +140,7 @@ public class MyResource {
      * @param year Can be fuzzy
      * @param month Can be fuzzy
      * @param day Can be fuzzy
-     * @return A list of entries match the declaration date
+     * @return A list of entries match the begin date
      */
     @GET
     @Path("/incidentBeginDate")
@@ -170,7 +175,7 @@ public class MyResource {
                             regex("incidentBeginDate", dayPattern))).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Incident Begin Date Query")
+        Document res = new Document("name", "Incident Begin Date")
                                    .append("status", "ok")
                                    .append("entries", entries);
 
@@ -185,7 +190,7 @@ public class MyResource {
      * @param year Can be fuzzy
      * @param month Can be fuzzy
      * @param day Can be fuzzy
-     * @return A list of entries match the declaration date
+     * @return A list of entries match the end date
      */
     @GET
     @Path("/incidentEndDate")
@@ -220,7 +225,7 @@ public class MyResource {
                             regex("incidentEndDate", dayPattern))).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Incident End Date Query")
+        Document res = new Document("name", "Incident End Date")
                                    .append("status", "ok")
                                    .append("entries", entries);
 
@@ -235,7 +240,7 @@ public class MyResource {
      * @param year Can be fuzzy
      * @param month Can be fuzzy
      * @param day Can be fuzzy
-     * @return A list of entries match the declaration date
+     * @return A list of entries match the close out date
      */
     @GET
     @Path("/disasterCloseOutDate")
@@ -270,7 +275,7 @@ public class MyResource {
                             regex("disasterCloseOutDate", dayPattern))).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Incident End Date Query")
+        Document res = new Document("name", "Incident End Date")
                                    .append("status", "ok")
                                    .append("entries", entries);
 
@@ -285,14 +290,14 @@ public class MyResource {
      * @param year Can be fuzzy
      * @param month Can be fuzzy
      * @param day Can be fuzzy
-     * @return A list of entries match the declaration date
+     * @return A list of entries match last refresh date
      */
     @GET
     @Path("/lastRefresh")
     @Produces(MediaType.APPLICATION_JSON)
     public String getByLastRefresh(@QueryParam("year") String year, 
-                                            @QueryParam("month") String month,
-                                            @QueryParam("day") String day) {
+                                   @QueryParam("month") String month,
+                                   @QueryParam("day") String day) {
         MongoClient mongoClient = new MongoClient("localhost", 27017);
         MongoDatabase database = mongoClient.getDatabase("DizasterX");
         MongoCollection<Document> collection = database.getCollection("data");
@@ -320,7 +325,256 @@ public class MyResource {
                             regex("lastRefresh", dayPattern))).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Incident End Date Query")
+        Document res = new Document("name", "Last Update")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling state
+     * 
+     * if params are null return all results
+     * @param state state abbreviation
+     * @return A list of entries match the state
+     */
+    @GET
+    @Path("/state")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByState(@QueryParam("value") String value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        Pattern pattern = Pattern.compile(value, Pattern.CASE_INSENSITIVE);
+        collection.find(regex("state", pattern)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "State")
+                                    .append("status", "ok")
+                                    .append("size", entries.size())
+                                    .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling county
+     * 
+     * if params are null return all results
+     * @param state state abbreviation
+     * @return A list of entries match county name
+     */
+    @GET
+    @Path("/county")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByCounty(@QueryParam("value") String value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        Pattern pattern = Pattern.compile(value, Pattern.CASE_INSENSITIVE);
+        collection.find(regex("state", pattern)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "County")
+                                    .append("status", "ok")
+                                    .append("size", entries.size())
+                                    .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling place code
+     * 
+     * @param year Must be accurate number for now
+     * @return A list of entries match the place code
+     */
+    @GET
+    @Path("/placeCode")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByPlaceCode(@QueryParam("value") int value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // Find exact plcae code
+        collection.find(eq("placeCode", value)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "Place Code")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling ihProgramDeclared
+     * 
+     * @param year Must be accurate number for now
+     * @return A list of entries match the ihProgramDeclared
+     */
+    @GET
+    @Path("/ihProgramDeclared")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByIHProgram(@QueryParam("value") int value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // find exact ih program value
+        collection.find(eq("ihProgramDeclared", value)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "IH Program")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling iaProgramDeclared
+     * 
+     * @param year Must be accurate number for now
+     * @return A list of entries match the iaProgramDeclared
+     */
+    @GET
+    @Path("/iaProgramDeclared")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByIAProgram(@QueryParam("value") int value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // find exact ia program value
+        collection.find(eq("iaProgramDeclared", value)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "IA Program")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling paProgramDeclared
+     * 
+     * @param year Must be accurate number for now
+     * @return A list of entries match the paProgramDeclared
+     */
+    @GET
+    @Path("/paProgramDeclared")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByPAProgram(@QueryParam("value") int value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // find exact PA program value
+        collection.find(eq("paProgramDeclared", value)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "PA Program")
+                                   .append("status", "ok")
+                                   .append("entries", entries);
+
+        mongoClient.close();
+        return res.toJson();
+    }
+
+    /**
+     * Method handling hmProgramDeclared
+     * 
+     * @param year Must be accurate number for now
+     * @return A list of entries match the hmProgramDeclared
+     */
+    @GET
+    @Path("/hmProgramDeclared")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getByHMProgram(@QueryParam("value") int value) {
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("DizasterX");
+        MongoCollection<Document> collection = database.getCollection("data");
+        
+        final List<Document> entries = new ArrayList<>();
+
+        Block<Document> addToList = new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                entries.add(document);
+            }
+        };
+
+        // find exact hm program value
+        collection.find(eq("hmProgramDeclared", value)).forEach(addToList);
+        
+        // Packaging
+        Document res = new Document("name", "HM Program")
                                    .append("status", "ok")
                                    .append("entries", entries);
 
@@ -357,7 +611,7 @@ public class MyResource {
         collection.find(regex("title", pattern)).forEach(addToList);
         
         // Packaging
-        Document res = new Document("name", "Title Query")
+        Document res = new Document("name", "Title")
                         .append("status", "ok")
                         .append("size", entries.size())
                         .append("entries", entries);
@@ -383,7 +637,7 @@ public class MyResource {
         Document entries = collection.find(eq("hash", value)).first();
 
         // Packaging
-        Document res = new Document("name", "Hash Query")
+        Document res = new Document("name", "Hash")
                         .append("status", "ok")
                         .append("entries", entries);
         
