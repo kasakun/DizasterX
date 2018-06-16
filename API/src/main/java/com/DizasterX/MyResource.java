@@ -48,6 +48,12 @@ import java.util.regex.Pattern;
  */
 @Path("data")
 public class MyResource {
+    @GET
+    public String accessHome() {
+        String res = "Hello, Welcome to DizasterX API";
+        return res;
+    }
+
     /**
      * Method handling declaration date
      * 
