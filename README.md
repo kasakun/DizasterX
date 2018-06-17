@@ -7,6 +7,7 @@ Author: Zeyu Chen(chenzy@gatech.edu), Xibei Zhang(xb_zhang@gatech.edu)
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 ![progress](http://progressed.io/bar/30?title=done)
 ![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
+![API](https://img.shields.io/badge/API-available-green.svg)
 
 
 ## Goal
