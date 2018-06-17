@@ -1,6 +1,6 @@
 # DizasterX
-![license](https://img.shields.io/github/license/mashape/apistatus.svg)
-![progress](http://progressed.io/bar/30?title=done)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)]
+[![progress](http://progressed.io/bar/30?title=done)]
 [![API](https://img.shields.io/badge/API-available-green.svg)](http://czy-kasakun.com:8080/DizasterX/webapi/data/)
 
 A web app for historical disaster analysis
