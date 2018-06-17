@@ -6,9 +6,7 @@ Author: Zeyu Chen(chenzy@gatech.edu), Xibei Zhang(xb_zhang@gatech.edu)
 
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 ![progress](http://progressed.io/bar/30?title=done)
-![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
-![API](https://img.shields.io/badge/API-available-green.svg)
-
+[![API](https://img.shields.io/badge/API-available-green.svg)](http://czy-kasakun.com:8080/DizasterX/webapi/data/)
 
 ## Goal
 Provide an efficient solution for history disaster study and research.
@@ -64,6 +62,7 @@ Currently, the query size cannot be too large due to the limited memory of the s
 | data virtulization       | d3 or opengl for js is recommended       | Low      | Xibei Zhang |  To Do    |
 | ~~RESTful api~~          | ~~java+jersey, build and deploy~~        | ~~High~~ | Zeyu Chen   |  Done     |
 | RESTful api test         | Test API                                 | Low      | TBA         |  To Do    |
+| API Documentation        | API doc and SLL                          | Low      | TBA         |  To Do    |
 
 ## Data
 Data is from FEMA dataset. Downloaded on May 11th 2018.
