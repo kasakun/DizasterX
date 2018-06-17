@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.DizasterX</groupId>
-    <artifactId>API</artifactId>
+    <artifactId>api</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>API</name>
+    <name>api</name>
 
     <dependencyManagement>
         <dependencies>
