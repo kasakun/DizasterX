@@ -62,7 +62,7 @@ Currently, the query size cannot be too large due to the limited memory of the s
 | data virtulization       | d3 or opengl for js is recommended       | Low      | Xibei Zhang |  To Do    |
 | ~~RESTful api~~          | ~~java+jersey, build and deploy~~        | ~~High~~ | Zeyu Chen   |  Done     |
 | RESTful api test         | Test API                                 | Low      | TBA         |  To Do    |
-| API Documentation        | API doc and SLL                          | Low      | TBA         |  To Do    |
+| API Misc                 | API doc, site construct and SSL          | Low      | TBA         |  To Do    |
 
 ## Data
 Data is from FEMA dataset. Downloaded on May 11th 2018.
