@@ -3,7 +3,7 @@
 [![progress](http://progressed.io/bar/30?title=done)](https://github.com/kasakun/DizasterX)
 [![jetty](https://img.shields.io/badge/jetty-v9.4.11-blue.svg)](https://www.eclipse.org/jetty/)
 [![jersey](https://img.shields.io/badge/jersey-v2.27-yellow.svg)](https://jersey.github.io/)
-[![MongoDb](https://img.shields.io/badge/mongodb-v3.0.6-green.svg)](https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.0.6.tgz)
+[![MongoDb](https://img.shields.io/badge/mongodb-v3.6.5-green.svg)](https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-3.6.5.tgz)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/kasakun/DizasterX/blob/master/LICENSE)
 [![API](https://img.shields.io/badge/API-available-green.svg)](http://czy-kasakun.com:8080/DizasterX/webapi/data/)
 

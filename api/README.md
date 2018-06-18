@@ -23,5 +23,5 @@ Start mongodb and jetty services
 
 ```sh
 nohup java -jar $JETTY_HOME/start.jar &
-nohup mongod &
+mongod -f $CONFIG_PATH/mongod.conf --fork
 ```
